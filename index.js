@@ -13,6 +13,7 @@ const graphrcBase=function(){
     let bar = [
         " ",
         "\u2581",
+        "\u2582",
         "\u2583",
         "\u2584",
         "\u2585",
@@ -32,9 +33,9 @@ const graphrcBase=function(){
         return number;
      }
      const end = function(length, first){
-        if (60 > length - number) 
+        if (60 > length - first) 
             return length;
-        return number+60;
+        return first+60;
      }
      const minCalc = function(data){
         let min = data[0];
@@ -70,10 +71,10 @@ const graphrcBase=function(){
          return (' \u25B2').padEnd(60, ' ');
      }
      const line = function(data, line_num){
-        const modif = ((14-line_num)*8);
+        const modify = ((14-line_num)*8);
         let out = " \u2502";
         for (let i of data ) {
-             minus = parseInt(i) - modify;
+             let minus = parseInt(i - modify);
              if (1 > minus)
                  minus = 0;
              if (minus > 7)
@@ -91,7 +92,7 @@ const graphrcBase=function(){
      }
  
      const render = function (data, number){
-        let = graph =[];
+        let graph =[];
         const length = data.length-1;
         const first = start(length, number);
         const last = end(length, first);
@@ -99,7 +100,7 @@ const graphrcBase=function(){
         const min = minCalc(data);
         const max = maxCalc(data);
         const diff = diffCalc(max, min);
-        const divider = divCalc(diff);
+        const div = divCalc(diff);
         const pool = poolCalc(data, div, min);
         graph.push(
             firstLine()
@@ -113,5 +114,6 @@ const graphrcBase=function(){
         );
         return graph;
      }
-
 }
+
+exports.base = graphrcBase;
