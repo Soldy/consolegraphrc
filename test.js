@@ -1,7 +1,11 @@
-const nanoTest  = new (require('nanoTest')).test({
-    'debugPrint' : 'short'
+#!/usr/bin/nodejs
+'use strict';
+
+const $nanoTest  = new (require('nanoTest')).test({
+    'progress_bar' : false,
+    'debug_print' : 'short'
 });
-const graph = new (require('./index.js')).base();
+const $graph = new (require('./index.js')).base();
 
 
 const graphOut = [ 
@@ -25,13 +29,13 @@ const graphOut = [
 
 
 
-nanoTest.add(
+$nanoTest.add(
     'graph',
     {
-        'function':graph.render,
+        'function':$graph.render,
         'options':[[4,5,12,4,2,4,9,16,6,4,14,5,11,8,5,12,4,2,4,9,16,6,4,14,5,11,8,5,12,4,2,4,9,16,6,4,14,5,11,8,1]],
     },
     'j==',
     graphOut
 );
-nanoTest.run();
+$nanoTest.run();
