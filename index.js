@@ -7,10 +7,19 @@
  * @prototype
  */
 const graphrcBase=function(){
+    /*
+     * @param {array}
+     * @param {integer}
+     * @public
+     * @return {string}
+     */
     this.render = function (data, number){
-        return render(data, number);
+        return _render(data, number);
     };
-    let bar = [
+    /*
+     * @var {array}
+     */
+    let _bar = [
         ' ',
         '\u2581',
         '\u2582',
@@ -21,7 +30,13 @@ const graphrcBase=function(){
         '\u2587',
         '\u2588',
     ];
-    const start  = function(length, number){
+    /*
+     * @param {integer}
+     * @param {integer}
+     * @private
+     * @return {integer}
+     */
+    const _start  = function(length, number){
         if (
             (typeof number !== 'number')||
             (60 > length)||
@@ -32,32 +47,66 @@ const graphrcBase=function(){
             return (length - 60);
         return number;
     };
-    const end = function(length, first){
+    /*
+     * @param {integer}
+     * @param {integer}
+     * @private
+     * @return {integer}
+     */
+    const _end = function(length, first){
         if (60 > length - first) 
             return length;
         return first+60;
     };
-    const minCalc = function(data){
+    /*
+     * @param {array}
+     * @private
+     * @return {integer}
+     */
+    const _minCalc = function(data){
         let min = data[0];
         for (let i of data)
             if (min > parseFloat(i))
                 min = Math.floor(i);
         return min;
     };
-    const maxCalc = function(data){
+    /*
+     * @param {array}
+     * @private
+     * @return {integer}
+     */
+    const _maxCalc = function(data){
         let max = data[0];
         for (let i of data)
             if (parseFloat(i) > max)
                 max = Math.ceil(i);
         return max;
     };
-    const diffCalc = function(max, min){
+    /*
+     * @param {integer}
+     * @param {integer}
+     * @private
+     * @return {integer}
+     */
+    const _diffCalc = function(max, min){
         return max-min;
     };
-    const divCalc = function(diff){
+    /*
+     * @param {integer}
+     * @private
+     * @return {float}
+     */
+    const _divCalc = function(diff){
         return diff / 100;
     };
-    const poolCalc = function(data, div, min){
+    /*
+     * @param {array}
+     * @param {float}
+     * @param {integer}
+     * @private
+     * @return {array}
+     */
+    const _poolCalc = function(data, div, min){
         let pool = [];
         for (let i of data)
             pool.push(
@@ -67,10 +116,20 @@ const graphrcBase=function(){
             );
         return pool;
     };
-    const firstLine = function(){
+    /*
+     * @private
+     * @return {string}
+     */
+    const _firstLine = function(){
         return (' \u25B2').padEnd(60, ' ');
     };
-    const line = function(data, line_num){
+    /*
+     * @param {array}
+     * @param {integer}
+     * @private
+     * @return {string}
+     */
+    const _line = function(data, line_num){
         const modify = ((14-line_num)*8);
         let out = ' \u2502';
         for (let i of data ) {
@@ -79,38 +138,47 @@ const graphrcBase=function(){
                 minus = 0;
             if (minus > 7)
                 minus = 8;
-            out+= bar[minus];
+            out+= _bar[minus];
         }
         return out.padEnd(62, ' ');
 
     };
-    const lastLine = function(){
+    /*
+     * @private
+     * @return {string}
+     */
+    const _lastLine = function(){
         return (
             (' \u2514').padEnd(60, '\u2500')+
              '\u25B6 '
         );
     };
- 
-    const render = function (data, number){
+    /*
+     * @param {array}
+     * @param {integer}
+     * @private
+     * @return {string}
+     */
+    const _render = function (data, number){
         let graph =[];
         const length = data.length-1;
-        const first = start(length, number);
-        const last = end(length, first);
+        const first  = _start(length, number);
+        const last   = _end(length, first);
         data = data.slice(first, last);
-        const min = minCalc(data);
-        const max = maxCalc(data);
-        const diff = diffCalc(max, min);
-        const div = divCalc(diff);
-        const pool = poolCalc(data, div, min);
+        const min  = _minCalc(data);
+        const max  = _maxCalc(data);
+        const diff = _diffCalc(max, min);
+        const div  = _divCalc(diff);
+        const pool = _poolCalc(data, div, min);
         graph.push(
-            firstLine()
+            _firstLine()
         );
         for (let i = 0; 14> i ; i++)
             graph.push(
-                line(pool, i)
+                _line(pool, i)
             );
         graph.push(
-            lastLine()
+            _lastLine()
         );
         return graph;
     };
